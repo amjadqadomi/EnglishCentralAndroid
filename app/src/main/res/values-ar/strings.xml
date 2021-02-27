@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Github Users</string>
+    <string name="following_text_view"> يتابع %1$d </string>
+    <string name="followers_text_view">%1$d متابعين</string>
+</resources>

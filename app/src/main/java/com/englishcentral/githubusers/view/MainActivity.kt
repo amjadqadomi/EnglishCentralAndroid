@@ -1,5 +1,6 @@
 package com.englishcentral.githubusers.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,10 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.englishcentral.githubusers.dataclasses.GithubUser
 import com.englishcentral.githubusers.R
-import com.englishcentral.githubusers.interfaces.ContractInterface
+import com.englishcentral.githubusers.interfaces.MainActivityInterfaces
 import com.englishcentral.githubusers.presenter.MainActivityPresenter
 
-class MainActivity : AppCompatActivity(), ContractInterface.View, UsersListCallback {
+class MainActivity : AppCompatActivity(), MainActivityInterfaces.View, UsersListCallback {
     private var presenter: MainActivityPresenter? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), ContractInterface.View, UsersListCallb
     }
 
 
-    override fun initView() {
+    private fun initView() {
         linearLayoutManager = LinearLayoutManager(this)
         recyclerView = findViewById(R.id.users_list_view)
         recyclerView.layoutManager = linearLayoutManager
@@ -50,7 +51,9 @@ class MainActivity : AppCompatActivity(), ContractInterface.View, UsersListCallb
     }
 
     override fun didSelectUser(user: GithubUser) {
-
+        val intent = Intent(this, UserDetailsActivity::class.java)
+        intent.putExtra("EXTRA_USERNAME", user.login)
+        startActivity(intent)
     }
 
     override fun getMoreUsers() {

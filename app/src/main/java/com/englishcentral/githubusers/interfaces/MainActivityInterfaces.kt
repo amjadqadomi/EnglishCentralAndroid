@@ -2,10 +2,9 @@ package com.englishcentral.githubusers.interfaces
 
 import com.englishcentral.githubusers.dataclasses.GithubUser
 
-interface ContractInterface {
+interface MainActivityInterfaces {
 
     interface View {
-        fun initView()
         fun updateViewData(users: ArrayList<GithubUser>)
     }
 

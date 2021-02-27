@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Github Users</string>
+    <string name="following_text_view">%1$d following</string>
+    <string name="followers_text_view">%1$d followers</string>
 </resources>

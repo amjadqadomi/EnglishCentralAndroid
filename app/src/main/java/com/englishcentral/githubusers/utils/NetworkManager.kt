@@ -8,6 +8,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.englishcentral.githubusers.dataclasses.GithubUser
+import com.englishcentral.githubusers.dataclasses.GithubUserDetails
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.json.JSONObject
@@ -109,7 +110,7 @@ class NetworkManager() {
         }
 
 
-        fun getAllProducts(context: Context, index: Int,callback: (ArrayList<GithubUser>) -> Unit) {
+        fun getUsers(context: Context, index: Int, callback: (ArrayList<GithubUser>) -> Unit) {
             val url = GlobalKeys.baseURL + "?since=$index"
             val volleyConnectionCallBack = object : NetworkCallbacks {
                 override fun onSuccess(response: String) {
@@ -118,6 +119,35 @@ class NetworkManager() {
                     val products: ArrayList<GithubUser> =
                         Gson().fromJson(response, arrayType)
                     callback(products)
+                }
+
+                override fun onFail(failMessage: String) {
+                    Log.d("error", failMessage)
+                }
+
+            }
+
+
+            connectToServerWithBodyAndHeaders(
+                context,
+                url,
+                "application/json",
+                null,
+                volleyConnectionCallBack,
+                Request.Method.GET,
+                null,
+                false
+            )
+        }
+
+        fun getUserDetails(context: Context, username: String, callback: (GithubUserDetails) -> Unit) {
+            val url = GlobalKeys.baseURL + "/$username"
+            val volleyConnectionCallBack = object : NetworkCallbacks {
+                override fun onSuccess(response: String) {
+                    Log.d("success", response)
+                    val userDetails: GithubUserDetails =
+                        Gson().fromJson(response, GithubUserDetails::class.java)
+                    callback(userDetails)
                 }
 
                 override fun onFail(failMessage: String) {

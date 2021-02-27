@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.englishcentral.githubusers.dataclasses.GithubUser
 import com.englishcentral.githubusers.R
+import de.hdodenhof.circleimageview.CircleImageView
 
 interface UsersListCallback {
     fun didSelectUser(user: GithubUser)
@@ -24,7 +25,7 @@ class UsersCustomAdapter(private val context: Context, private var dataSet: Arra
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameTextView: TextView = view.findViewById(R.id.name_text_view)
-        val avatarImageView: ImageView = view.findViewById(R.id.avatar_image_view)
+        val avatarImageView: CircleImageView = view.findViewById(R.id.avatar_image_view)
         
     }
 
@@ -35,7 +36,6 @@ class UsersCustomAdapter(private val context: Context, private var dataSet: Arra
 
     fun addToDataSet(itemsToAdd: ArrayList<GithubUser>) {
         this.dataSet.addAll(itemsToAdd)
-//        itemsToAdd.first().id?.let { notifyItemRangeInserted(it,itemsToAdd.count()) }
         notifyDataSetChanged()
     }
 

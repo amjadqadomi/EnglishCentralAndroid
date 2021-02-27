@@ -1,17 +1,13 @@
 package com.englishcentral.githubusers.presenter
 
 import android.content.Context
-import com.englishcentral.githubusers.interfaces.ContractInterface
+import com.englishcentral.githubusers.interfaces.MainActivityInterfaces
 import com.englishcentral.githubusers.model.MainActivityModel
 
-class MainActivityPresenter(_view: ContractInterface.View, context: Context): ContractInterface.Presenter {
+class MainActivityPresenter(_view: MainActivityInterfaces.View, context: Context): MainActivityInterfaces.Presenter {
 
-    private var view: ContractInterface.View = _view
-    private var model: ContractInterface.Model = MainActivityModel(context)
-
-    init {
-//        view.initView()
-    }
+    private var view: MainActivityInterfaces.View = _view
+    private var model: MainActivityInterfaces.Model = MainActivityModel(context)
 
 
     override fun getUsers() {
