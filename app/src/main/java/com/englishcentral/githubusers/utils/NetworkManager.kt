@@ -29,12 +29,9 @@ class NetworkManager() {
             action: String,
             contentType: String?,
             parameters: JSONObject?,
-            volleyConnectionCallBack: NetworkCallbacks
-            ,
+            volleyConnectionCallBack: NetworkCallbacks,
             connectionMethod: Int,
-            body: String?,
-            bearerAuth: Boolean = true
-
+            body: String?
         ) {
 
             var queue = Volley.newRequestQueue(context)
@@ -50,26 +47,8 @@ class NetworkManager() {
                     volleyConnectionCallBack.onFail(
                         error.localizedMessage ?: "حدث خطأ ما, يرجى المحاولة فيما بعد"
                     )
-
-//                val errorString = error.message
-                    Log.d("volleyDetailedError", error.toString())
-//                val responseBody = String(error.networkResponse.data, Charset.defaultCharset())
-//                val data = JSONObject(responseBody)
-//                val message = data.optString("msg")
-//
-//                val ss = data.getJSONObject("error")
-//                val code = ss.getInt("code")
-//
-//
-//                if (errorString != null) {
-//                    volleyConnectionCallBack.onFail(errorString)
-//                }
                     queue.stop()
                     queue = null
-
-//                    if (bearerAuth) {
-//                        networkManagerActions.needsAuth()
-//                    }
                 }) {
                 @Throws(AuthFailureError::class)
                 override fun getHeaders(): Map<String, String> {
@@ -123,6 +102,7 @@ class NetworkManager() {
 
                 override fun onFail(failMessage: String) {
                     Log.d("error", failMessage)
+                    //error handling for certain cases should be implemented
                 }
 
             }
@@ -135,8 +115,7 @@ class NetworkManager() {
                 null,
                 volleyConnectionCallBack,
                 Request.Method.GET,
-                null,
-                false
+                null
             )
         }
 
@@ -152,6 +131,7 @@ class NetworkManager() {
 
                 override fun onFail(failMessage: String) {
                     Log.d("error", failMessage)
+                    //error handling for certain cases should be implemented
                 }
 
             }
@@ -164,8 +144,7 @@ class NetworkManager() {
                 null,
                 volleyConnectionCallBack,
                 Request.Method.GET,
-                null,
-                false
+                null
             )
         }
     }

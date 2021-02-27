@@ -10,28 +10,22 @@ import com.englishcentral.githubusers.utils.NetworkManager
 
 class UserDetailsActivityModel(var context: Context) : UserDetailsInterfaces.Model {
 
-    private var db : AppDatabase = Room.databaseBuilder(
-        context,
-        AppDatabase::class.java, "database-name"
-    ).build()
 
     override fun getUserData(username: String, callback: (GithubUserDetails) -> Unit) {
 
-
         val thread = Thread {
             //fetch Records from local database
-            val githubUserDetailsEntity = db.userDetailsDao().findByUsername(username)
-            if (githubUserDetailsEntity != null) {
+            val githubUserDetailsEntity = AppDatabase.getInstance(context).findByUsername(username)
+            if (githubUserDetailsEntity == null) {
+                fetchUsersFromServer(username, callback)
+            }else {
                 val githubUserDetails = GithubUserDetails(githubUserDetailsEntity.login, githubUserDetailsEntity.id, githubUserDetailsEntity.avatar_url,
                     githubUserDetailsEntity.name, githubUserDetailsEntity.bio, githubUserDetailsEntity.followers, githubUserDetailsEntity.following)
                 callback(githubUserDetails)
-            }else {
-                fetchUsersFromServer(username,callback)
+                fetchUsersFromServer(username, callback)
             }
         }
         thread.start()
-
-
     }
 
     private fun fetchUsersFromServer(username: String, callback: (GithubUserDetails) -> Unit) {
@@ -50,7 +44,7 @@ class UserDetailsActivityModel(var context: Context) : UserDetailsInterfaces.Mod
             userDetailsEntity.followers = userDetails.followers
             userDetailsEntity.following = userDetails.following
             userDetailsEntity.bio = userDetails.bio
-            db.userDetailsDao().insertAll(userDetailsEntity)
+            AppDatabase.getInstance(context).insertAll(userDetailsEntity)
         }
         thread.start()
 

@@ -11,18 +11,12 @@ import com.englishcentral.githubusers.utils.NetworkManager
 
 
 class MainActivityModel(var context: Context): MainActivityInterfaces.Model {
-    private var db :AppDatabase = Room.databaseBuilder(
-         context,
-         AppDatabase::class.java, "database-name"
-     ).build()
-
     private var users: ArrayList<GithubUser> = ArrayList()
-
 
     private fun checkLocalDB(callback: (ArrayList<GithubUser>) -> Unit) {
         val thread = Thread {
             //fetch Records from local database
-            val githubUsers = db.userDao().getAll()
+            val githubUsers = AppDatabase.getInstance(context).getAll()
             if (githubUsers.isNotEmpty()) {
                 val storedGithubUsers = ArrayList<GithubUser>()
                 githubUsers.forEach() {
@@ -32,6 +26,7 @@ class MainActivityModel(var context: Context): MainActivityInterfaces.Model {
                 }
                 this.users.addAll(storedGithubUsers)
                 callback(storedGithubUsers)
+                fetchUsersFromServer(callback, 0)
             }else {
                 fetchUsersFromServer(callback)
             }
@@ -40,8 +35,8 @@ class MainActivityModel(var context: Context): MainActivityInterfaces.Model {
 
     }
 
-    private fun fetchUsersFromServer(callback: (ArrayList<GithubUser>) -> Unit) {
-        NetworkManager.getUsers(context, users.size) { users ->
+    private fun fetchUsersFromServer(callback: (ArrayList<GithubUser>) -> Unit, index: Int = users.size) {
+        NetworkManager.getUsers(context, index) { users ->
             this.users.addAll(users)
             Log.i("response count", users.size.toString())
             users.forEach() {
@@ -65,7 +60,7 @@ class MainActivityModel(var context: Context): MainActivityInterfaces.Model {
             val userEntity = GithubUserEntity(id)
             userEntity.avatar_url = user.avatar_url
             userEntity.login = user.login
-            db.userDao().insertAll(userEntity)
+            AppDatabase.getInstance(context).insertAll(userEntity)
         }
         thread.start()
 
